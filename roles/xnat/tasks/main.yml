@@ -1,4 +1,7 @@
 ---
+- name: "Setup XNAT database, username and password"
+  include: postgresql.yml
+
 #- name: "Download XNAT tarball"
 #  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/xnat-1.6.3.tar.gz dest=/tmp
 
@@ -8,4 +11,6 @@
 - name: "Copy build.properties"
   template: src=build.properties.j2 dest=/usr/local/xnat/build.properties
 
-#include: postgresql.yml
+- name: "Copy default tomcat6 debian file"
+  template: src=tomcat6.j2 dest=/etc/default/tomcat6
+  when: ansible_os_family == 'Debian'

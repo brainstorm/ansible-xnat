@@ -34,3 +34,4 @@ xdat:
     enable_new_registrations: false
     security_channel: any  # Production servers should always use https_ Options: http, https, any
     enable_csrf_token: true
+    java_mem_MiB: 128
