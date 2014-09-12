@@ -6,7 +6,13 @@ Deploys a [XNAT][1] instance to analyze and store and manipulate [fnmri][2] data
 Quickstart
 ----------
 
-    ansible-playbook site.yml
+If you want to deploy on bare metal:
+
+    ansible-playbook site.yml 192.168.0.1,
+
+If you use VirtualBox/Vagrant, just run:
+
+	vagrant up
 
 License
 -------
