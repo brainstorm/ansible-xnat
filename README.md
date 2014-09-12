@@ -1,7 +1,11 @@
 ansible-xnat
 ============
 
-Deploys a [XNAT](http://www.xnat.org) instance to analyze and store and manipulate [fnmri](http://en.wikipedia.org/wiki/Functional_magnetic_resonance_imaging) datasets together with accompanying metadata ([DICOM](http://en.wikipedia.org/wiki/DICOM) among others).
+**WARNING: work in progress**
+
+Deploys a [XNAT](http://www.xnat.org). 
+
+XNAT is an open source imaging informatics platform, developed by the Neuroinformatics Research Group at Washington University. It facilitates common management, productivity, and quality assurance tasks for imaging and associated data. Thanks to its extensibility, XNAT can be used to support a wide range of imaging-based projects.
 
 Quickstart
 ----------
