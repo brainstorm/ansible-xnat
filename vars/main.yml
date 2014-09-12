@@ -1,0 +1,36 @@
+## Please have a look at the official XNAT "build.properties" file
+## for a more comprehensive description of each variable. This
+## file aims to capture sensible defaults for experienced XNAT
+## admins, providing a quickstart deployment.
+
+# Database connection
+dbname: xnat
+dbuser: xnat
+dbpasswd: xnat
+
+# Email server for XNAT
+smtp:
+    - hostmaster_email: xnat@example_com
+    - server: xnat.example.com
+    - port: 25
+    - mail_prefix: XNAT # Prefix to the subject line for system emails_
+    # Mail server credentials. These values are only required for mail servers with authentication turned on.
+    - auth_name:
+    - auth_passwd:
+
+# XNAT variables (mainly those in build_properties)
+xdat:
+    - project_name: xnat
+    - maven_appserver_home: /var/lib/tomcat6/webapps/
+    - archive_location: /tmp
+    - prearchive_location: /tmp
+    - cache_location: /tmp
+    - ftp_location: /tmp
+    - build_location: /tmp
+    - pipeline_location: /tmp
+    - modules_location: /tmp
+    - main_url: http://localhost:8080/xnat
+    - require_login: true
+    - enable_new_registrations: false
+    - security_channel: any  # Production servers should always use https_ Options: http, https, any
+    - enable_csrf_token: true
