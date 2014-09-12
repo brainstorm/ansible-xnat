@@ -6,11 +6,11 @@
 - name: "Setup XNAT database, username and password"
   include: postgresql.yml
 
-#- name: "Download XNAT tarball"
-#  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/xnat-1.6.3.tar.gz dest=/tmp
+- name: "Download XNAT tarball"
+  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/xnat-1.6.3.tar.gz dest=/tmp
 
-#- name: "Unpack XNAT"
-#  unarchive: src=/tmp/xnat-1.6.3.tar.gz dest=/usr/local copy=no
+- name: "Unpack XNAT"
+  unarchive: src=/tmp/xnat-1.6.3.tar.gz dest=/usr/local copy=no
 
 - name: "Copy build.properties"
   template: src=build.properties.j2 dest=/usr/local/xnat/build.properties
@@ -19,6 +19,7 @@
   template: src=tomcat6.j2 dest=/etc/default/tomcat6
   when: ansible_os_family == 'Debian'
 
+# XXX: Change this to create=yes and setenv.sh (used by default by tomcat it seems)
 - name: "Set JAVA_HOME for tomcat"
   lineinfile: >
       dest=/usr/local/xnat/bin/setup.sh 

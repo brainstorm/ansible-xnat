@@ -13,6 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "base"
   # config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/20140902/trusty-server-cloudimg-amd64-vagrant-disk1.box"
 
+  # Default to localhost, otherwise 3(NXDOMAIN)
+  config.vm.hostname = "localhost"
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "site.yml"
 #    ansible.verbose = 'vvvv'
