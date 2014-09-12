@@ -1,4 +1,8 @@
 ---
+- name: "Install OpenJDK"
+  apt: pkg={{ java_packages }}
+  when: ansible_os_family == 'Debian'
+
 - name: "Setup XNAT database, username and password"
   include: postgresql.yml
 
@@ -11,6 +15,16 @@
 - name: "Copy build.properties"
   template: src=build.properties.j2 dest=/usr/local/xnat/build.properties
 
-- name: "Copy default tomcat6 debian file"
+- name: "Copy default tomcat6 debian file. Username change, as advised by XNAT docs"
   template: src=tomcat6.j2 dest=/etc/default/tomcat6
   when: ansible_os_family == 'Debian'
+
+- name: "Set JAVA_HOME for tomcat"
+  lineinfile: >
+      dest=/usr/local/xnat/bin/setup.sh 
+      line='export JAVA_HOME=/usr/lib/jvm/default-java/'
+      regexp='^# Only set XDAT_HOME if not already set'
+      insertbefore='^# Only set XDAT_HOME if not already set'
+
+- name: "Run setup.sh script"
+  command: chdir=/usr/local/xnat bin/setup.sh
