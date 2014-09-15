@@ -19,6 +19,17 @@
   template: src=tomcat6.j2 dest=/etc/default/tomcat6
   when: ansible_os_family == 'Debian'
 
+- name: "Setup XNAT data directories structure"
+  file: path={{ item }} group={{ tomcat }} owner={{ tomcat }} state=directory
+  with_items:
+      - "{{ xdat.archive_location }}"
+      - "{{ xdat.prearchive_location }}"
+      - "{{ xdat.cache_location }}"
+      - "{{ xdat.ftp_location }}"
+      - "{{ xdat.build_location }}"
+      - "{{ xdat.pipeline_location }}"
+      - "{{ xdat.modules_location }}"
+
 - name: "Set JAVA_HOME for tomcat"
   template: src=setenv.sh dest=/usr/local/xnat/bin/setenv.sh 
 

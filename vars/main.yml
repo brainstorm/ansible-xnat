@@ -3,10 +3,11 @@
 ## file aims to capture sensible defaults for experienced XNAT
 ## admins, providing a quickstart deployment.
 
-# Database connection
+# Database connection and tomcat user
 dbname: xnat
 dbuser: xnat
 dbpasswd: xnat
+tomcat: tomcat6
 
 # Email server for XNAT
 smtp:
@@ -18,17 +19,17 @@ smtp:
     auth_name:
     auth_passwd:
 
-# XNAT variables (mainly those in build_properties)
+# XNAT variables (mainly those in build.properties)
 xdat:
     project_name: xnat
-    maven_appserver_home: /var/lib/tomcat6/webapps/
-    archive_location: /tmp
-    prearchive_location: /tmp
-    cache_location: /tmp
-    ftp_location: /tmp
-    build_location: /tmp
-    pipeline_location: /tmp
-    modules_location: /tmp
+    maven_appserver_home: /var/lib/tomcat6
+    archive_location: /srv/xnat/archive
+    prearchive_location: /srv/xnat/prearchive
+    cache_location: /srv/xnat/cache
+    ftp_location: /srv/xnat/ftp
+    build_location: /srv/xnat/tmp
+    pipeline_location: /srv/xnat/pipelines
+    modules_location: /srv/xnat/modules
     main_url: http://localhost:8080/xnat
     require_login: true
     enable_new_registrations: false
