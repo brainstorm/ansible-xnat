@@ -4,6 +4,7 @@
   gather_facts: true # roles use ansible_os_family
   vars:
       java_packages: openjdk-7-jdk
+      xnat_tarball: xnat-1.6.3.tar.gz
   vars_files:
     - vars/main.yml  
   roles:
