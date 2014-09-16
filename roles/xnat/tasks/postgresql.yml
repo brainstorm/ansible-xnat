@@ -1,7 +1,4 @@
 ---
-- name: "Ensure JDBC connector for JAVA-pgsql is installed"
-  apt: pkg=libpostgresql-jdbc-java
-
 - name: ensure database is created
   action: postgresql_db db={{dbname}}
 

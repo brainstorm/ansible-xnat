@@ -41,5 +41,15 @@
         regexp='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="true">'
         line='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="false">'
 
+- name: "Add system user XNAT"
+  user: name={{ dbuser }} shell=/bin/false
+
 - name: "Run setup.sh"
-  shell: chdir=/usr/local/xnat . ./bin/setenv.sh && ./bin/setup.sh -Ddeploy=True
+  shell: chdir=/usr/local/xnat . ./bin/setenv.sh && ./bin/setup.sh
+
+- name: "Fill XNAT postgresql database"
+  command: psql -f /usr/local/xnat/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }}
+
+- name: "Deploy WAR file to tomcat"
+  copy:  src=/usr/local/xnat/deployments/xnat dest={{ maven_appserver_home }}/webapps
+  notify: restart tomcat
