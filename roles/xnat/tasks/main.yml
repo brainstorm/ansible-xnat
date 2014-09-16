@@ -33,5 +33,13 @@
 - name: "Set JAVA_HOME for tomcat"
   template: src=setenv.sh dest=/usr/local/xnat/bin/setenv.sh 
 
+# XXX: Ugly fix to not bail out on setup, to be fixed upstream:
+# https://groups.google.com/forum/#!topic/xnat_discussion/acPuE4__2YM
+- name: "Patch maven to ignore deployment issues"
+  lineinfile: >
+        dest=/usr/local/xnat/maven.xml
+        regexp='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="true">'
+        line='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="false">'
+
 - name: "Run setup.sh"
   shell: chdir=/usr/local/xnat . ./bin/setenv.sh && ./bin/setup.sh -Ddeploy=True
