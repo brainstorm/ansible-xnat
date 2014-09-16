@@ -27,8 +27,8 @@
       - "{{ xdat.cache_location }}"
       - "{{ xdat.ftp_location }}"
       - "{{ xdat.build_location }}"
-      - "{{ xdat.pipeline_location }}"
       - "{{ xdat.modules_location }}"
+  #    - "{{ xdat.pipeline_location }}" # XXX: requires special handling
 
 - name: "Set JAVA_HOME for tomcat"
   template: src=setenv.sh dest=/usr/local/xnat/bin/setenv.sh 

@@ -28,11 +28,11 @@ xdat:
     cache_location: /srv/xnat/cache
     ftp_location: /srv/xnat/ftp
     build_location: /srv/xnat/tmp
-    pipeline_location: /srv/xnat/pipelines
+#    pipeline_location: /srv/xnat/pipelines # XXX: requires special handling
     modules_location: /srv/xnat/modules
     main_url: http://localhost:8080/xnat
     require_login: true
     enable_new_registrations: false
     security_channel: any  # Production servers should always use https_ Options: http, https, any
     enable_csrf_token: true
-    java_mem_MiB: 128
+    java_mem_MiB: 512
