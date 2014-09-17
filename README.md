@@ -10,7 +10,7 @@ XNAT is an open source imaging informatics platform, developed by the Neuroinfor
 Quickstart
 ----------
 
-If you use VirtualBox/Vagrant, just run:
+If you use [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](http://www.vagrantup.com/downloads.html), just run:
 
 	vagrant up
 
@@ -26,5 +26,5 @@ GPLv3
 Author Information
 ------------------
 
-Roman Valls Guimera
+Roman Valls Guimera,
 http://blogs.nopcode.org/brainstorm

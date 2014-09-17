@@ -51,5 +51,5 @@
   command: psql -f /usr/local/xnat/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }}
 
 - name: "Deploy WAR file to tomcat"
-  copy:  src=/usr/local/xnat/deployments/xnat dest={{ maven_appserver_home }}/webapps
+  copy:  src=/usr/local/xnat/deployments/{{ xdat.project_name }} dest={{ xdat.maven_appserver_home }}/webapps
   notify: restart tomcat
