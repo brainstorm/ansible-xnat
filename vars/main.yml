@@ -3,7 +3,7 @@
 ## file aims to capture sensible defaults for experienced XNAT
 ## admins, providing a quickstart deployment.
 
-# Database connection and tomcat user
+# Database connection and tomcat user/group
 dbname: xnat
 dbuser: xnat
 dbpasswd: xnat
@@ -32,7 +32,7 @@ xdat:
     modules_location: /srv/xnat/modules
     main_url: http://localhost:8080/xnat
     require_login: true
-    enable_new_registrations: false
+    enable_new_registrations: true
     security_channel: any  # Production servers should always use https_ Options: http, https, any
     enable_csrf_token: true
     java_mem_MiB: 512
