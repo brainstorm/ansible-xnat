@@ -50,7 +50,7 @@
 - name: "Adjust default XNAT security settings"
   shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}
   with_items:
-      - "{{ xdat.app_src }}/bin/StoreXML -l security/security.xml -allowDataDeletion true"
+      - "{{ xdat.app_src }}/bin/StoreXML -project {{ xdat.project_name }} -l security/security.xml -allowDataDeletion true"
       - "{{ xdat.app_src }}/bin/StoreXML -dir ./work/field_groups -u admin -p admin -allowDataDeletion true"
 
 - name: "Fill XNAT postgresql database"
@@ -58,4 +58,7 @@
 
 - name: "Deploy XNAT to tomcat"
   shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/update.sh -Ddeploy=true
+
+- name: "Adjust XNAT/tomcat permissions post-deployment"
+  file: path={{ xdat.maven_appserver_home }} group={{ tomcat }} owner={{ tomcat }} state=directory recurse=yes
   notify: restart tomcat
