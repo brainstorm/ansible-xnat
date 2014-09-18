@@ -9,6 +9,9 @@ dbuser: xnat
 dbpasswd: xnat
 tomcat: tomcat6
 
+# Ensure tomcat is not enabled during database/StoreXML operations
+tomcat6_enabled: false
+
 # Email server for XNAT
 smtp:
     hostmaster_email: xnat@example_com
@@ -36,4 +39,7 @@ xdat:
     enable_new_registrations: true
     security_channel: any  # Production servers should always use https_ Options: http, https, any
     enable_csrf_token: true
-    java_mem_MiB: 512
+
+java_mem:
+    Xms: 512
+    Xmx: 1024
