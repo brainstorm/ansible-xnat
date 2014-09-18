@@ -13,7 +13,7 @@
   unarchive: src=/tmp/{{ xnat_tarball }} dest=/usr/local copy=no
 
 - name: "Copy build.properties"
-  template: src=build.properties.j2 dest=/usr/local/xnat/build.properties
+  template: src=build.properties.j2 dest={{ xdat.app_src }}/build.properties
 
 - name: "Copy default tomcat6 debian file. Username change, as advised by XNAT docs"
   template: src=tomcat6.j2 dest=/etc/default/tomcat6
@@ -31,13 +31,13 @@
   #    - "{{ xdat.pipeline_location }}" # XXX: requires special handling
 
 - name: "Set JAVA_HOME for tomcat"
-  template: src=setenv.sh dest=/usr/local/xnat/bin/setenv.sh 
+  template: src=setenv.sh dest={{ xdat.app_src }}/bin/setenv.sh 
 
 # XXX: Ugly fix to not bail out on setup, to be fixed upstream:
 # https://groups.google.com/forum/#!topic/xnat_discussion/acPuE4__2YM
 - name: "Patch maven to ignore deployment issues"
   lineinfile: >
-        dest=/usr/local/xnat/maven.xml
+        dest={{ xdat.app_src }}/maven.xml
         regexp='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="true">'
         line='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="false">'
 
@@ -45,8 +45,17 @@
   user: name={{ dbuser }} shell=/bin/false
 
 - name: "Run setup.sh"
-  shell: chdir=/usr/local/xnat . ./bin/setenv.sh && ./bin/setup.sh -Ddeploy=true
-  notify: restart tomcat
+  shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/setup.sh
+
+- name: "Adjust default XNAT security settings"
+  shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}
+  with_items:
+      - "{{ xdat.app_src }}/bin/StoreXML -l security/security.xml -allowDataDeletion true"
+      - "{{ xdat.app_src }}/bin/StoreXML -dir ./work/field_groups -u admin -p admin -allowDataDeletion true"
 
 - name: "Fill XNAT postgresql database"
-  command: psql -f /usr/local/xnat/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }}
+  command: psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }}
+
+- name: "Deploy XNAT to tomcat"
+  shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/update.sh -Ddeploy=true
+  notify: restart tomcat

@@ -22,6 +22,7 @@ smtp:
 # XNAT variables (mainly those in build.properties)
 xdat:
     project_name: xnat
+    app_src: /usr/local/xnat
     maven_appserver_home: /var/lib/tomcat6
     archive_location: /srv/xnat/archive
     prearchive_location: /srv/xnat/prearchive

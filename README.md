@@ -18,6 +18,10 @@ If you want to deploy on bare metal:
 
     ansible-playbook site.yml 192.168.0.1,
 
+Prefer puppet for XNAT deployment? Check this out instead:
+
+	https://bitbucket.org/bigr_erasmusmc/puppet-xnat
+
 License
 -------
 
