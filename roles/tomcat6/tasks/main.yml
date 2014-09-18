@@ -8,7 +8,7 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Ensure Tomcat6 is installed (Debian).
-  apt: name=tomcat6 state=installed
+  apt: name=tomcat6 state=installed update_cache=yes
   when: ansible_os_family == 'Debian'
 
 - name: Copy tomcat6 server.xml.
