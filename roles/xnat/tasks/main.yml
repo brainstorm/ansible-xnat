@@ -3,14 +3,17 @@
   apt: pkg={{ java_packages }}
   when: ansible_os_family == 'Debian'
 
-- name: "Setup XNAT database, username and password"
-  include: postgresql.yml
+#- name: "Download XNAT tarball"
+#  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
 
-- name: "Download XNAT tarball"
-  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
+- name: "Download XNAT directly from GitHub"
+  get_url: url=http://github.com/boxerab/xnat/archive/master.tar.gz dest=/tmp/{{ xnat_tarball }} force=no
 
 - name: "Unpack XNAT"
   unarchive: src=/tmp/{{ xnat_tarball }} dest=/usr/local copy=no
+
+- name: "Symlink for Github xnat-master"
+  file: src={{ xdat.app_src }}-master dest={{ xdat.app_src }} owner={{ tomcat }} group={{ tomcat }} state=link
 
 - name: "Copy build.properties"
   template: src=build.properties.j2 dest={{ xdat.app_src }}/build.properties
@@ -19,7 +22,7 @@
   template: src=tomcat6.j2 dest=/etc/default/tomcat6
   when: ansible_os_family == 'Debian'
 
-- name: "Setup XNAT data directories structure"
+- name: "Setup XNAT data directories structure (LFH compliant)"
   file: path={{ item }} group={{ tomcat }} owner={{ tomcat }} state=directory
   with_items:
       - "{{ xdat.archive_location }}"
@@ -30,7 +33,7 @@
       - "{{ xdat.modules_location }}"
   #    - "{{ xdat.pipeline_location }}" # XXX: requires special handling
 
-- name: "Set JAVA_HOME for tomcat"
+- name: "Copy setenv.sh with JAVA_HOME for tomcat"
   template: src=setenv.sh dest={{ xdat.app_src }}/bin/setenv.sh 
 
 # XXX: Ugly fix to not bail out on setup, to be fixed upstream:
@@ -41,14 +44,14 @@
         regexp='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="true">'
         line='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="false">'
 
-- name: "Add system user XNAT"
-  user: name={{ dbuser }} shell=/bin/false
+- name: "Setup XNAT database"
+  include: postgresql.yml
 
 - name: "Run setup.sh"
   shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/setup.sh
 
-- name: "Fill XNAT postgresql database"
-  command: psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }}
+- name: "Fill XNAT postgresql database with generated .sql from setup.sh"
+  command: psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ tomcat }} {{ dbname }}
 
 - name: "Adjust default XNAT security settings"
   shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}
@@ -59,23 +62,6 @@
 - name: "Deploy XNAT to tomcat"
   shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/update.sh -Ddeploy=true
 
-# XXX: Why should we re-drop and import back the database here? Who knows!:
-# https://groups.google.com/forum/#!topic/xnat_discussion/5UAoZ70ayiw
-- name: "Drop DB (again)"
-  action: postgresql_db db={{ dbname }} state=absent
-
-- name: "Re-import stuff (again)"
-  include: postgresql.yml
-
-- name: "Fill XNAT postgresql database"
-  command: psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }}
-
-- name: "Adjust default XNAT security settings"
-  shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}
-  with_items:
-      - "{{ xdat.app_src }}/bin/StoreXML -project {{ xdat.project_name }} -l security/security.xml -allowDataDeletion true"
-# XXX: Who knows why the above is necessary!
-
-- name: "Adjust XNAT/tomcat permissions post-deployment"
+- name: "Adjust XNAT/tomcat permissions post-deployment and start tomcat"
   file: path={{ xdat.maven_appserver_home }} group={{ tomcat }} owner={{ tomcat }} state=directory recurse=yes
   notify: restart tomcat
