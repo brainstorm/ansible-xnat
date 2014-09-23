@@ -40,6 +40,10 @@ xdat:
     security_channel: any  # Production servers should always use https_ Options: http, https, any
     enable_csrf_token: true
 
+# Java JVM and its settings
+java_packages:
+  - oracle-java7-installer
+
 java_mem:
     Xms: 512
     Xmx: 1024
