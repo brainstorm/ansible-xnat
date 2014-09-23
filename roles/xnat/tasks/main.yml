@@ -1,8 +1,4 @@
 ---
-- name: "Install OpenJDK"
-  apt: pkg={{ java_packages }}
-  when: ansible_os_family == 'Debian'
-
 #- name: "Download XNAT tarball"
 #  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
 
