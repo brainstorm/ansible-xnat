@@ -11,8 +11,9 @@ xdat.project.name={{ xdat.project_name }}
 xdat.project.template={{ xdat.project_name }}
 xdat.project.db.name={{ dbname }}
 xdat.project.db.driver=org.postgresql.Driver
-xdat.project.db.connection.string=jdbc:postgresql://localhost/{{ dbname }}?user={{ tomcat }}&amp;password={{ tomcat }};
-xdat.project.db.user={{ tomcat }}
+#xdat.project.db.connection.string=jdbc:postgresql://localhost/{{ dbname }}?user={{ dbuser }}&amp;password={{ dbuser }};
+xdat.project.db.connection.string=jdbc:postgresql://localhost/xnat
+xdat.project.db.user={{ dbuser }}
 xdat.project.db.password={{ dbpasswd }}
 
 # IMAGE FILE LOCATION (FOR USE WITH THE xnat TEMPLATE)

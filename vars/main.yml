@@ -3,6 +3,7 @@
 ## file aims to capture sensible defaults for experienced XNAT
 ## admins, providing a quickstart deployment.
 
+## General settings
 # Database connection and tomcat user/group
 dbname: xnat
 dbuser: xnat
@@ -13,6 +14,16 @@ tomcat_enabled: false
 tomcat_version: 7
 tomcat: tomcat{{ tomcat_version }}
 
+# Java JVM settings
+java_packages:
+  - oracle-java7-installer
+
+java_mem:
+    Xms: 512
+    Xmx: 1024
+
+
+## XNAT settings
 # Email server for XNAT
 smtp:
     hostmaster_email: xnat@example_com
@@ -40,11 +51,3 @@ xdat:
     enable_new_registrations: true
     security_channel: any  # Production servers should always use https_ Options: http, https, any
     enable_csrf_token: true
-
-# Java JVM and its settings
-java_packages:
-  - oracle-java7-installer
-
-java_mem:
-    Xms: 512
-    Xmx: 1024

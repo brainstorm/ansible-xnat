@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "localhost"
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "site.yml"
-#    ansible.verbose = 'vvvv'
+#	ansible.verbose = 'vvvv'
 #    ansible.inventory_path = '.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory'
     ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
   end
@@ -32,7 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # config.vm.network "forwarded_port", guest: 80, host: 8080
 
-  config.vm.network "forwarded_port", guest: 8983, host: 8080
+#  config.vm.network "forwarded_port", guest: 8983, host: 8080
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 8104, host: 8104 # DICOM SCP
 
   # Create a private network, which allows host-only access to the machine

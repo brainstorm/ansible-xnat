@@ -1,6 +1,8 @@
 ---
-#- name: "Download XNAT tarball"
+#- name: "Download XNAT official release tarball"
 #  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
+- name: "Add system user {{ dbuser }}"
+  user: name={{ dbuser }} shell=/bin/bash # XXX: restrict shell
 
 - name: "Download XNAT directly from GitHub"
   get_url: url=http://github.com/boxerab/xnat/archive/master.tar.gz dest=/tmp/{{ xnat_tarball }} force=no
@@ -29,25 +31,14 @@
       - "{{ xdat.modules_location }}"
   #    - "{{ xdat.pipeline_location }}" # XXX: requires special handling
 
-- name: "Copy setenv.sh with JAVA_HOME for tomcat"
+- name: "Copy setenv.sh with JAVA_HOME for tomcat{{ tomcat_version }}"
   template: src=setenv.sh dest={{ xdat.app_src }}/bin/setenv.sh 
-
-# XXX: Ugly fix to not bail out on setup, to be fixed upstream:
-# https://groups.google.com/forum/#!topic/xnat_discussion/acPuE4__2YM
-- name: "Patch maven to ignore deployment issues"
-  lineinfile: >
-        dest={{ xdat.app_src }}/maven.xml
-        regexp='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="true">'
-        line='<java classname="GenerateAllCreateFiles" maxmemory="1024m" fork="true" failonerror="false">'
-
-- name: "Setup XNAT database"
-  include: postgresql.yml
 
 - name: "Run setup.sh"
   shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/setup.sh
 
 - name: "Fill XNAT postgresql database with generated .sql from setup.sh"
-  command: psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ tomcat }} {{ dbname }}
+  command: su - xnat -c "psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }} {{ dbname }}"
 
 - name: "Adjust default XNAT security settings"
   shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}

@@ -1,2 +1,9 @@
 ---
-# defaults file for ansible-xnat
+postgresql_databases:
+    - name: "{{ dbname }}"
+postgresql_users:
+    - name: "{{ dbuser }}"
+postgresql_user_privileges:
+    - name: "{{ dbuser }}"
+      db: "{{ dbname }}"
+      priv: "ALL" #XXX: Restrict privs
