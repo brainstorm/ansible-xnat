@@ -17,4 +17,4 @@
 
 - name: Ensure tomcat{{ tomcat_version }} is running.
   service: name=tomcat{{ tomcat_version }} state=started enabled=yes
-  when: tomcat{{ tomcat_version }}_enabled
+  when: tomcat_enabled

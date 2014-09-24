@@ -9,7 +9,7 @@
     - vars/main.yml  
   roles:
     - { role: java }
-    - { role: tomcat6 }
+    - { role: tomcat }
     - { role: postgresql }
     - { role: xnat }
       
