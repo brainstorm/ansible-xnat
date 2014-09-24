@@ -2,7 +2,7 @@
 #- name: "Download XNAT official release tarball"
 #  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
 - name: "Add system user {{ dbuser }}"
-  user: name={{ dbuser }} shell=/bin/bash # XXX: restrict shell
+  user: name={{ dbuser }} shell=/bin/bash # XXX: restrict shell?
 
 - name: "Download XNAT directly from GitHub"
   get_url: url=http://github.com/boxerab/xnat/archive/master.tar.gz dest=/tmp/{{ xnat_tarball }} force=no
