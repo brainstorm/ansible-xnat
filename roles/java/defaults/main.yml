@@ -1,3 +1,4 @@
 ---
 java_packages: []
 java_cleanup: True
+java_home: /usr/lib/jvm/java-7-oracle

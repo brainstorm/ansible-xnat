@@ -1,0 +1,20 @@
+---
+- name: Ensure "Tomcat{{ tomcat_version }}" packages are installed (RedHat).
+  yum: name={{ item }} state=installed
+  with_items:
+  - "tomcat{{ tomcat_version }}"
+  - "tomcat{{ tomcat_version }}-webapps"
+  - "tomcat{{ tomcat_version }}-admin-webapps"
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure "Tomcat{{ tomcat_version }}" is installed (Debian).
+  apt: name=tomcat{{ tomcat_version }} state=installed update_cache=yes
+  when: ansible_os_family == 'Debian'
+
+#- name: Copy tomcat{{ tomcat_version }} server.xml.
+#  template: src=server.xml.j2 dest=/etc/tomcat{{ tomcat_version }}/server.xml owner=root group=root mode=0644
+#  notify: restart tomcat
+
+- name: Ensure tomcat{{ tomcat_version }} is running.
+  service: name=tomcat{{ tomcat_version }} state=started enabled=yes
+  when: tomcat{{ tomcat_version }}_enabled
