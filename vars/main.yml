@@ -27,7 +27,7 @@ smtp:
 xdat:
     project_name: xnat
     app_src: /usr/local/xnat
-    maven_appserver_home: /var/lib/tomcat6
+    maven_appserver_home: /var/lib/tomcat{{ tomcat_version }}
     archive_location: /srv/xnat/archive
     prearchive_location: /srv/xnat/prearchive
     cache_location: /srv/xnat/cache
