@@ -6,4 +6,4 @@
       - openjdk-6-jdk
   roles:
     - geerlingguy.java
-    - { role: ansible-role-tomcat6, tomcat6_enabled: false }
+    - { role: ansible-role-tomcat6, tomcat_enabled: false }

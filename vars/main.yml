@@ -7,10 +7,11 @@
 dbname: xnat
 dbuser: xnat
 dbpasswd: xnat
-tomcat: tomcat6
 
 # Ensure tomcat is not enabled during database/StoreXML operations
-tomcat6_enabled: false
+tomcat_enabled: false
+tomcat_version: 7
+tomcat: tomcat{{ tomcat_version }}
 
 # Email server for XNAT
 smtp:

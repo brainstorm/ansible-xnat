@@ -33,6 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080
 
   config.vm.network "forwarded_port", guest: 8983, host: 8080
+  config.vm.network "forwarded_port", guest: 8104, host: 8104 # DICOM SCP
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.

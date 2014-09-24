@@ -14,8 +14,8 @@
 - name: "Copy build.properties"
   template: src=build.properties.j2 dest={{ xdat.app_src }}/build.properties
 
-- name: "Copy default tomcat6 debian file. Username change, as advised by XNAT docs"
-  template: src=tomcat6.j2 dest=/etc/default/tomcat6
+- name: "Copy default tomcat{{ tomcat_version }} debian file. Username change, as advised by XNAT docs"
+  template: src=tomcat.j2 dest=/etc/default/tomcat{{ tomcat_version }}
   when: ansible_os_family == 'Debian'
 
 - name: "Setup XNAT data directories structure (LFH compliant)"

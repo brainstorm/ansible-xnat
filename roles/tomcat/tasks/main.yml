@@ -11,9 +11,10 @@
   apt: name=tomcat{{ tomcat_version }} state=installed update_cache=yes
   when: ansible_os_family == 'Debian'
 
-#- name: Copy tomcat{{ tomcat_version }} server.xml.
-#  template: src=server.xml.j2 dest=/etc/tomcat{{ tomcat_version }}/server.xml owner=root group=root mode=0644
-#  notify: restart tomcat
+- name: Copy tomcat{{ tomcat_version }} server.xml.
+  template: src=server.xml.j2 dest=/etc/tomcat{{ tomcat_version }}/server.xml owner=root group=root mode=0644
+  notify: restart tomcat
+  when: tomcat_enabled
 
 - name: Ensure tomcat{{ tomcat_version }} is running.
   service: name=tomcat{{ tomcat_version }} state=started enabled=yes

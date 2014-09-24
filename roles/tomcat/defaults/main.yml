@@ -1,4 +1,5 @@
 ---
+tomcat_version: 7
 tomcat_enabled: true
 tomcat:
     hostname: localhost
