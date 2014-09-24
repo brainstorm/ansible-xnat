@@ -13,6 +13,7 @@ dbpasswd: xnat
 tomcat_enabled: false
 tomcat_version: 7
 tomcat: tomcat{{ tomcat_version }}
+postgresql_standard_conforming_strings: off # As advised by docs XXX: needed?
 
 # Java JVM settings
 java_packages:
