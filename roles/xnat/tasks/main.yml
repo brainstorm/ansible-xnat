@@ -1,17 +1,20 @@
 ---
-#- name: "Download XNAT official release tarball"
-#  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
+- name: "Download XNAT official release tarball"
+  get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
+
 - name: "Add system user {{ dbuser }}"
   user: name={{ dbuser }} shell=/bin/bash # XXX: restrict shell?
 
-- name: "Download XNAT directly from GitHub"
-  get_url: url=http://github.com/boxerab/xnat/archive/master.tar.gz dest=/tmp/{{ xnat_tarball }} force=no
+# unreliable
+#- name: "Download XNAT directly from GitHub"
+#  get_url: url=http://github.com/boxerab/xnat/archive/master.tar.gz dest=/tmp/{{ xnat_tarball }} force=no
 
 - name: "Unpack XNAT"
   unarchive: src=/tmp/{{ xnat_tarball }} dest=/usr/local copy=no
 
-- name: "Symlink for Github xnat-master"
-  file: src={{ xdat.app_src }}-master dest={{ xdat.app_src }} owner={{ tomcat }} group={{ tomcat }} state=link
+# only needed for github download
+#- name: "Symlink for Github xnat-master"
+#  file: src={{ xdat.app_src }}-master dest={{ xdat.app_src }} owner={{ tomcat }} group={{ tomcat }} state=link
 
 - name: "Copy build.properties"
   template: src=build.properties.j2 dest={{ xdat.app_src }}/build.properties
