@@ -2,8 +2,8 @@
 - name: "Download XNAT official release tarball"
   get_url: url=ftp://ftp.nrg.wustl.edu/pub/xnat/{{ xnat_tarball }} dest=/tmp/{{ xnat_tarball }} force=no 
 
-- name: "Add system user {{ dbuser }}"
-  user: name={{ dbuser }} shell=/bin/bash # XXX: restrict shell?
+- name: "Add system user {{ tomcat }}"
+  user: name={{ tomcat }} shell=/bin/bash # XXX: restrict shell?
 
 # unreliable
 #- name: "Download XNAT directly from GitHub"
@@ -40,8 +40,11 @@
 - name: "Run setup.sh"
   shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/setup.sh
 
+- name: "Adjust XNAT deployment permissions"
+  file: path={{ xdat.app_src }} group={{ tomcat }} owner={{ tomcat }} recurse=yes
+
 - name: "Fill XNAT postgresql database with generated .sql from setup.sh"
-  command: su - xnat -c "psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }} {{ dbname }}"
+  command: su "{{ tomcat }}" -c "psql -f {{ xdat.app_src }}/deployments/{{ xdat.project_name }}/sql/{{ xdat.project_name }}.sql -U {{ dbuser }} {{ dbname }}"
 
 - name: "Adjust default XNAT security settings"
   shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}
@@ -51,13 +54,6 @@
 
 - name: "Deploy XNAT to tomcat"
   shell: chdir={{ xdat.app_src }} . ./bin/setenv.sh && ./bin/update.sh -Ddeploy=true
-
-# Run those again to fillin username/password for admin/admin? XXX
-- name: "Adjust default XNAT security settings"
-  shell: chdir={{ xdat.app_src }}/deployments/{{ xdat.project_name }} . {{ xdat.app_src }}/bin/setenv.sh {{ item }}
-  with_items:
-      - "{{ xdat.app_src }}/bin/StoreXML -project {{ xdat.project_name }} -l security/security.xml -allowDataDeletion true"
-      - "{{ xdat.app_src }}/bin/StoreXML -dir ./work/field_groups -u admin -p admin -allowDataDeletion true"
 
 - name: "Adjust XNAT/tomcat permissions post-deployment and start tomcat"
   file: path={{ xdat.maven_appserver_home }} group={{ tomcat }} owner={{ tomcat }} state=directory recurse=yes
